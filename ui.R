@@ -1,0 +1,50 @@
+shinyUI(pageWithSidebar(
+  headerPanel('Historical European Stock Index Investment Performance (1991-1998)'),
+  sidebarPanel(
+    sliderInput('investAmt', 'Amount to invest', value = 25000, min = 0, max = 100000, step = 1000),
+    checkboxGroupInput("idx", "European Stock Index:",
+                       c("DAX" = "DAX",
+                         "SMI" = "SMI",
+                         "CAC" = "CAC",
+                         "FTSE" = "FTSE"),
+                       selected = c("DAX","SMI","CAC","FTSE")),
+    dateInput('startDate', 'Start Date:', value = '1991-07-01', min = '1991-06-30', 
+              max = '1998-08-25'),
+    dateInput('endDate', 'End Date:', value = '1998-08-25', min = '1991-06-30', 
+              max = '1998-08-25')
+  ),
+  mainPanel(
+    tabsetPanel(
+      tabPanel('Documentation', 
+               h4('Application Documentation'),
+               p('This application illustrates the historical returns of a hypothetical ',
+                 'portfolio comprised of European equity indices (i.e., the DAX, SMI, ',
+                 'CAC, and FTSE, which represent the major index from Germany, Switzerland, ',
+                 'France and the UK, respectively), over a user-defined period between ',
+                 'July 1, 1991 and August 25, 1998. Data is available in the R datasets package ',
+                 '(see: EuStockMarkets).'),
+               p(strong('Input instructions:')),
+               p('1) Indicate the notional amount of your investment (from 0 to 100,000 in ',
+                 'increments of 1000).'),
+               p('2) Select one or more indices that you would like to include in the portfolio',
+                 '(note: you must select at least one).'),
+               p('3) Select a start and end date (note that the index performance data will only be ',
+                 'computed for valid business days).'),
+               p(strong('Application output:')),
+               p('The Portfolio Output tab shows the number of business days along with the computed returns and ',
+                 'standard deviations of returns for each index and the evenly-weighted portfolio. ',
+                 'The Plot tab illustrates the performance of each selected index, as well as ',
+                 'the cumulative returns of the specified investment portfolio.')),
+      tabPanel('Portfolio Output', 
+               h4('Holding period (# of business days):'),
+               verbatimTextOutput('oBusDays'),
+               h4('Portfolio Performance: '),
+               tableOutput('oPerfTable'),
+               h4('Final Portfolio Value:'),
+               verbatimTextOutput('oPortVal')),
+      tabPanel('Plot',
+               plotOutput('idxPlot'),
+               plotOutput('portPerfPlot'))
+      )
+  )
+))
